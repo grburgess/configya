@@ -7,7 +7,7 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/grburgess/yaml_config?style=for-the-badge)
 
 
-# yaml_config
+# configya
 
 ![alt text](https://raw.githubusercontent.com/grburgess/yaml_config/master/logo.png)
 
