@@ -1,4 +1,15 @@
+[![Travis CI w/ Logo](https://img.shields.io/travis/grburgess/cosmogrb/master.svg?logo=travis)](https://travis-ci.org/grburgess/yaml_config)
+[![codecov](https://codecov.io/gh/grburgess/yaml_config/branch/master/graph/badge.svg)](https://codecov.io/gh/grburgess/yaml_config)
+## status
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/grburgess/yaml_config/master?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/grburgess/yaml_config?style=for-the-badge)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/grburgess/yaml_config?style=for-the-badge)
+![GitHub contributors](https://img.shields.io/github/contributors/grburgess/yaml_config?style=for-the-badge)
+
+
 # yaml_config
+
+![alt text](https://raw.githubusercontent.com/grburgess/yaml_config/master/logo.png)
 
 ## What is this?
 
@@ -278,8 +289,4 @@ config
 
 Also, if you manually edit the config in an editor, it will check if the types are correct. If not, it will replace that value with the default value and backup your config
 
-
-```python
-
-```
 
