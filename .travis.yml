@@ -1,29 +1,25 @@
-
-# Config file for automatic testing at travis-ci.org
-
 language: python
+
+os:
+- linux
+- osx
+
 python:
-
-  - "3.6"
-  - "3.7"
-  - "3.8"
-# os:
-#   - linux
-#   - osx
-
-
+- '3.6'
+- '3.7'
+- '3.8'
 install:
-  - pip install --upgrade pytest-cov codecov
-  - python setup.py install
+- pip install --upgrade pytest-cov codecov
+- python setup.py install
 script:
-  - python -m pytest -vv   --cov=configya/
-  - codecov --token=
-
-
-
-
-
-
-
-
-
+- python -m pytest -vv   --cov=configya/
+- codecov --token=
+deploy:
+  provider: pypi
+  user: "__token__"
+  password:
+    secure: FiLQwX3fhx3+KQiiWqRU48ksoeA1LrrPFhGEAZC2OF717rvQPfQ7uY4J/+wd4UCHedpzgBCMAvul0uYraakkBlbH7M/PfqwxoXvc9EYPyM5y5rvIWiIe2kyXdysNbPAK5f5xrKgAezZPBO3fqq/gTf/TTGaN6/B9CCPP1pG5KIqwBfGFBKUWA2nDhNwTKT0ZqI1OBmTLm2C9q9Xu1XIAtfYgPAUt9ctpVHGCV3GXX3rhxA77dzqNVZI40uSf+mA+uODCr2cuvg8kSLuw70oaMIsZPj+7RRsOxwVWqt8fCtrCTw2OMl93fvYJSUPDebddsCRPUnc8dl6KDZAn1ajGMvh4h8pujAiiIf8/MGB0sk2eWmhafzjqqXf82JwMv8rHURqZfmY8CrP/5yD2ZQawAN01JM1vvtZSpgEtB5IHxD8t9dUsP5bo9dD08G6D8QjEC4HTFMJ6HzBnHuvqIceFJBXpt+AikAEoCQAi/xjsb3vvV3kXK3I8OrGjQFDKFxqv/uF62+Glq7jO0lHNZoWqtiSV9Cn4Bg6VyTf7ODTzgrtnIlXRH8zebRew2WrIYIdfujUkCc/ZL9/Pinetvpc5Mgd9ETEP4yMTvSQYzkCz13DtD/F5gMhsxYEsOIQHmyEnKSy1aGP9JN6mItRW3A8l1xrE01kOGfOvbLO14K6J6Oc=
+  on:
+    tags: true
+  distributions: "sdist bdist_wheel" # Your distributions here
+  skip_existing: true
