@@ -133,3 +133,4 @@ dmypy.json
 /examples/*.md
 /examples/test.yml.bak
 /examples/.DS_Store
+/logo.key
