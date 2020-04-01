@@ -286,11 +286,29 @@ class YAMLConfig(object):
         else:
 
             raise ValueError(
-                "Configuration key %s does not exist in %s." % (key, self._full_path)
+                f"Configuration key {key} does not exist"
             )
+
+    def __setitem__(self, key, item):
+
+        if key in self._configuration:
+
+            assert not isinstance(self._configuration[key], dict), f"Woah, you are going to overwrite the structure"
+
+            self._configuration[key] = item
+
+        else:
+
+            raise ValueError(
+                f"Configuration key {key} does not exist"
+            )
+
+            
 
     def __repr__(self):
 
+        print(self._full_path)
+        
         return yaml.dump(self._configuration, default_flow_style=False)
 
 
