@@ -2,7 +2,7 @@ import os
 import yaml
 import warnings
 from nested_diff import diff
-import yaml_config.file_utils as file_utils
+import configya.file_utils as file_utils
 
 # from yaml_config.differ import differ
 import json
