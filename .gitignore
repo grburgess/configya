@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+/examples/*.yml
+/.DS_Store
+/examples/help/
+/examples/*.md
+/examples/test.yml.bak
+/examples/.DS_Store
