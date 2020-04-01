@@ -3,8 +3,8 @@ import shutil
 import yaml
 import pytest
 from nested_diff import diff
-from yaml_config.yaml_config import YAMLConfig, BadStructureWarning, BadTypeWarning, NoConfigurationWarning
-from yaml_config.file_utils import file_existing_and_readable, sanitize_filename
+from configya.yaml_config import YAMLConfig, BadStructureWarning, BadTypeWarning, NoConfigurationWarning
+from configya.file_utils import file_existing_and_readable, sanitize_filename
 
 
 _test_path = "config_test"

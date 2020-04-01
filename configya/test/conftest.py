@@ -1,7 +1,7 @@
 import os
 import shutil
 import pytest
-from yaml_config.yaml_config import YAMLConfig
+from configya.yaml_config import YAMLConfig
 
 
 _test_path = "config_test"
