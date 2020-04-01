@@ -1,0 +1,2 @@
+include versioneer.py
+include yaml_config/_version.py
