@@ -1,10 +1,11 @@
-[![Travis CI w/ Logo](https://img.shields.io/travis/grburgess/cosmogrb/master.svg?logo=travis)](https://travis-ci.org/grburgess/yaml_config)
-[![codecov](https://codecov.io/gh/grburgess/yaml_config/branch/master/graph/badge.svg)](https://codecov.io/gh/grburgess/yaml_config)
+[![Travis CI w/ Logo](https://img.shields.io/travis/grburgess/configya/master.svg?logo=travis)](https://travis-ci.org/grburgess/configya)
+[![codecov](https://codecov.io/gh/grburgess/configya/branch/master/graph/badge.svg)](https://codecov.io/gh/grburgess/configya)
+![PyPI](https://img.shields.io/pypi/v/configya?style=plastic)
 ## status
-![GitHub last commit (branch)](https://img.shields.io/github/last-commit/grburgess/yaml_config/master?style=for-the-badge)
-![GitHub issues](https://img.shields.io/github/issues/grburgess/yaml_config?style=for-the-badge)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/grburgess/yaml_config?style=for-the-badge)
-![GitHub contributors](https://img.shields.io/github/contributors/grburgess/yaml_config?style=for-the-badge)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/grburgess/configya/master?style=for-the-badge)
+![GitHub issues](https://img.shields.io/github/issues/grburgess/configya?style=for-the-badge)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/grburgess/configya?style=for-the-badge)
+![GitHub contributors](https://img.shields.io/github/contributors/grburgess/configya?style=for-the-badge)
 
 
 # configya
@@ -76,7 +77,8 @@ config = MyConfig()
 !ls /Users/jburgess/.my_cool_program/
 ```
 
-    config.yml
+    config.yml
+
 
 
 Yes, it is there.
@@ -247,7 +249,8 @@ config
 !ls /Users/jburgess/.my_cool_program/
 ```
 
-    config.yml     config.yml.bak
+    config.yml     config.yml.bak
+
 
 
 Also, if you manually edit the config in an editor, it will check if the types are correct. If not, it will replace that value with the default value and backup your config
