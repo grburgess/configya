@@ -1,1 +1,2 @@
 yaml_config/_version.py export-subst
+configya/_version.py export-subst

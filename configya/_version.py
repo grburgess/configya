@@ -42,8 +42,8 @@ def get_config():
     cfg.VCS = "git"
     cfg.style = "pep440"
     cfg.tag_prefix = "v"
-    cfg.parentdir_prefix = "yaml_config-"
-    cfg.versionfile_source = "yaml_config/_version.py"
+    cfg.parentdir_prefix = "configya-"
+    cfg.versionfile_source = "configya/_version.py"
     cfg.verbose = False
     return cfg
 

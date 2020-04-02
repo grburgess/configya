@@ -1,2 +1,3 @@
 include versioneer.py
 include yaml_config/_version.py
+include configya/_version.py

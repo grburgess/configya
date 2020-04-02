@@ -1,4 +1,4 @@
 ignore:
-  - "yaml_config/test"
-  - "yaml_config/_version.py"
+  - "configya/test"
+  - "configya/_version.py"
   
