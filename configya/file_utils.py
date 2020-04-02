@@ -30,25 +30,6 @@ def file_existing_and_readable(filename):
 
         return False
 
-
-def path_exists_and_is_directory(path):
-    sanitized_path = sanitize_filename(path, abspath=True)
-
-    if os.path.exists(sanitized_path):
-
-        if os.path.isdir(path):
-
-            return True
-
-        else:
-
-            return False
-
-    else:
-
-        return False
-
-
 def sanitize_filename(filename, abspath=False):
     sanitized = os.path.expandvars(os.path.expanduser(filename))
 
