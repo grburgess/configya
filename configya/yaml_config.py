@@ -30,7 +30,7 @@ class SingletonMeta(type):
         return cls._inst
 
 
-class YAMLConfig(object):
+class YAMLConfig(object, metaclass=SingletonMeta):
 
     def __init__(self, structure, config_path, config_name):
 

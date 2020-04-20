@@ -42,7 +42,7 @@ def test_bad_structure(config, bad_structure, config_class):
 
     # should create a test
 
-    #del config
+    delattr(config_class, '_inst')
     #print(config)
     rewrite_config(bad_structure)
 
@@ -63,7 +63,8 @@ def test_bad_type(config, wrong_type_structure, config_class):
 
     # should create a test
 
-    #del config
+    # this is a singleton so we need to trick it
+    delattr(config_class, '_inst')
     #print(config)
     rewrite_config(wrong_type_structure)
 
