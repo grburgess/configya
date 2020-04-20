@@ -12,6 +12,10 @@
 
 ![alt text](https://raw.githubusercontent.com/grburgess/yaml_config/master/logo.png)
 
+```bash
+pip install configya
+```
+
 ## What is this?
 
 I often make YAML configuration files for codes to input default parameters. I kept repeating myself and wanting more robustness to the structure required in the file... so I decided to make a generic one. 
