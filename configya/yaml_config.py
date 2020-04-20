@@ -20,15 +20,17 @@ class NoConfigurationWarning(RuntimeWarning):
     pass
 
 
-class YAMLConfig(object):
-    _instance = None
 
-    def __new__(cls, *args, **kwargs):
-        if cls._instance is None:
-            #    print('Creating the object')
-            cls._instance = super(YAMLConfig, cls).__new__(cls)
-            # Put any initialization here.
-        return cls._instance
+class SingletonMeta(type):
+
+    def __call__(cls, *args, **kwargs):
+        if not hasattr(cls, '_inst'):
+            obj = super(SingletonMeta, cls).__call__(*args, **kwargs)
+            cls._inst = obj
+        return cls._inst
+
+
+class YAMLConfig(object, metaclass=SingletonMeta):
 
     def __init__(self, structure, config_path, config_name):
 
