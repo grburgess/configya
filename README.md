@@ -10,7 +10,7 @@
 
 # configya
 
-![alt text](https://raw.githubusercontent.com/grburgess/yaml_config/master/logo.png)
+![alt text](https://raw.githubusercontent.com/grburgess/configya/master/logo.png)
 
 ```bash
 pip install configya
