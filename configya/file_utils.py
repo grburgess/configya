@@ -3,46 +3,29 @@ import shutil
 import tempfile
 import uuid
 from contextlib import contextmanager
+from pathlib import Path
 
 
-def file_existing_and_readable(filename):
-    sanitized_filename = sanitize_filename(filename)
+def file_existing_and_readable(filename) -> bool:
+    
+    sanitized_filename: Path = sanitize_filename(filename)
 
-    if os.path.exists(sanitized_filename):
+    return sanitized_filename.is_file()
 
-        # Try to open it
+def sanitize_filename(filename: str, abspath: bool=False) -> Path:
 
-        try:
-
-            with open(sanitized_filename):
-
-                pass
-
-        except:
-
-            return False
-
-        else:
-
-            return True
-
-    else:
-
-        return False
-
-def sanitize_filename(filename, abspath=False):
-    sanitized = os.path.expandvars(os.path.expanduser(filename))
+    sanitized: Path = Path(filename).expanduser()
 
     if abspath:
 
-        return os.path.abspath(sanitized)
+        return sanitized.absolute()
 
     else:
 
         return sanitized
 
 
-def if_directory_not_existing_then_make(directory):
+def if_directory_not_existing_then_make(directory: str) -> None:
     """
     If the given directory does not exists, then make it
     If a path is a file then check the parent dir
@@ -50,14 +33,14 @@ def if_directory_not_existing_then_make(directory):
     :return: None
     """
 
-    sanitized_directory = sanitize_filename(directory)
+    sanitized_directory: Path = sanitize_filename(directory)
 
-    if not os.path.exists(sanitized_directory):
+    if not sanitized_directory.exists():
 
         os.makedirs(sanitized_directory)
 
 
-def if_dir_containing_file_not_existing_then_make(filename):
+def if_dir_containing_file_not_existing_then_make(filename: str):
     """
     If the given directory does not exists, then make it
     If basename of path contains a '.' we assume it is a file and check the parent dir
@@ -65,11 +48,12 @@ def if_dir_containing_file_not_existing_then_make(filename):
     :return: None
     """
 
-    sanitized_directory = sanitize_filename(filename)
+    sanitized_directory: Path = sanitize_filename(filename)
 
-    if "." in os.path.basename(sanitized_directory):
-        sanitized_directory = os.path.dirname(sanitized_directory)
+    if "."  in sanitized_directory.name:
+        sanitized_directory = sanitized_directory.parent
 
-    if not os.path.exists(sanitized_directory):
-        os.makedirs(sanitized_directory)
+    if not sanitized_directory.exists():
+        sanitized_directory.mkdir(parents=True)
+        
 

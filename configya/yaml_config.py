@@ -3,6 +3,7 @@ import yaml
 import warnings
 from nested_diff import diff
 import configya.file_utils as file_utils
+from pathlib import Path
 
 # from yaml_config.differ import differ
 import json
@@ -20,30 +21,27 @@ class NoConfigurationWarning(RuntimeWarning):
     pass
 
 
-
 class SingletonMeta(type):
-
     def __call__(cls, *args, **kwargs):
-        if not hasattr(cls, '_inst'):
+        if not hasattr(cls, "_inst"):
             obj = super(SingletonMeta, cls).__call__(*args, **kwargs)
             cls._inst = obj
         return cls._inst
 
 
 class YAMLConfig(object, metaclass=SingletonMeta):
-
-    def __init__(self, structure, config_path, config_name):
+    def __init__(self, structure: dict, config_path: str, config_name: str):
 
         assert isinstance(structure, dict), "the structure must be in the form of dict"
 
-        self._default_structure = structure
+        self._default_structure: str = structure
 
-        self._config_path = file_utils.sanitize_filename(config_path)
+        self._config_path: Path = file_utils.sanitize_filename(config_path)
 
         file_utils.if_dir_containing_file_not_existing_then_make(self._config_path)
 
-        self._config_name = config_name
-        self._full_path = os.path.join(self._config_path, self._config_name)
+        self._config_name: str = config_name
+        self._full_path: Path = self._config_path / self._config_name
 
         if not self._is_existing():
 
@@ -53,7 +51,7 @@ class YAMLConfig(object, metaclass=SingletonMeta):
             # now try to read
             self._read_config()
 
-    def _read_config(self):
+    def _read_config(self) -> None:
         """
         read the default config
 
@@ -65,11 +63,9 @@ class YAMLConfig(object, metaclass=SingletonMeta):
         with open(self._full_path, "r") as f:
             user_config_dict = yaml.load(f, Loader=yaml.SafeLoader)
 
-        
-            
         self._check_if_corrupt(user_config_dict)
 
-    def _is_existing(self):
+    def _is_existing(self) -> bool:
         """
         
         is if the file is there, if not write
@@ -94,7 +90,7 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
             return True
 
-    def _check_if_corrupt(self, user_config_dict):
+    def _check_if_corrupt(self, user_config_dict: dict) -> bool:
         """
         check if the user file is corrupt
 
@@ -130,7 +126,7 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
             self._configuration = user_config_dict
 
-    def _check_same_structure(self, user_config_dict):
+    def _check_same_structure(self, user_config_dict: dict) -> bool:
         """
         Return True if d1 and d2 have the same keys structure 
         (same set of keys, and all nested dictionaries have
@@ -146,15 +142,14 @@ class YAMLConfig(object, metaclass=SingletonMeta):
         d2 = self._subs_values_with_none(self._default_structure)
 
         difference = diff(d1, d2)
-        
-        
+
         if "D" in difference:
 
             is_same = False
 
         return is_same
 
-    def _check_same_types(self, user_config_dict):
+    def _check_same_types(self, user_config_dict: dict) -> None:
         """
         
         check in the values all have the same types 
@@ -208,7 +203,7 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
             replace_inplace(user_config_dict, key, bad_value, good_value)
 
-    def _write_default_config(self):
+    def _write_default_config(self) -> None:
 
         file_utils.if_directory_not_existing_then_make(self._config_path)
 
@@ -221,7 +216,7 @@ class YAMLConfig(object, metaclass=SingletonMeta):
                 Dumper=yaml.SafeDumper,
             )
 
-    def _backup_user_config(self, user_config_dict):
+    def _backup_user_config(self, user_config_dict: dict) -> None:
         """
         write the read in user config to a backup file
         in the same directory
@@ -232,9 +227,9 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
         """
 
-        backup_file_name = f"{self._full_path}.bak"
+        backup_file_name: Path = Path(f"{self._full_path}.bak)")
 
-        with open(backup_file_name, "w") as f:
+        with backup_file_name.open("w") as f:
 
             yaml.dump(
                 user_config_dict,
@@ -287,30 +282,26 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
         else:
 
-            raise ValueError(
-                f"Configuration key {key} does not exist"
-            )
+            raise ValueError(f"Configuration key {key} does not exist")
 
     def __setitem__(self, key, item):
 
         if key in self._configuration:
 
-            assert not isinstance(self._configuration[key], dict), f"Woah, you are going to overwrite the structure"
+            assert not isinstance(
+                self._configuration[key], dict
+            ), f"Woah, you are going to overwrite the structure"
 
             self._configuration[key] = item
 
         else:
 
-            raise ValueError(
-                f"Configuration key {key} does not exist"
-            )
-
-            
+            raise ValueError(f"Configuration key {key} does not exist")
 
     def __repr__(self):
 
         print(self._full_path)
-        
+
         return yaml.dump(self._configuration, default_flow_style=False)
 
 
