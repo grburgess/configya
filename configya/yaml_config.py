@@ -60,11 +60,17 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
         """
 
-        with open(self._full_path, "r") as f:
+        with self._full_path/open("r") as f:
             user_config_dict = yaml.load(f, Loader=yaml.SafeLoader)
 
-        self._check_if_corrupt(user_config_dict)
+            if user_config_dict is not None:
+            
+                self._check_if_corrupt(user_config_dict)
 
+            else:
+
+                self._configuration = self._default_structure
+                
     def _is_existing(self) -> bool:
         """
         
