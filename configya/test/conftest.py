@@ -3,9 +3,21 @@ import shutil
 import pytest
 from configya.yaml_config import YAMLConfig
 
+from pathlib import Path
 
-_test_path = "config_test"
+
+_test_path = Path("config_test")
 _test_file = "test.yml"
+
+def rm_tree(pth):
+    pth = Path(pth)
+    for child in pth.glob('*'):
+        if child.is_file():
+            child.unlink()
+        else:
+            rm_tree(child)
+    pth.rmdir()
+
 
 @pytest.fixture(scope="session")
 def structure():
@@ -38,7 +50,7 @@ def config(config_class):
 
     yield my_config
 
-    shutil.rmtree(_test_path)
+    rm_tree(_test_path)
 
 @pytest.fixture(scope="function")
 def bad_structure():

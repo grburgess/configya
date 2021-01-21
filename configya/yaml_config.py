@@ -60,7 +60,7 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
         """
 
-        with self._full_path/open("r") as f:
+        with self._full_path.open("r") as f:
             user_config_dict = yaml.load(f, Loader=yaml.SafeLoader)
 
             if user_config_dict is not None:
