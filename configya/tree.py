@@ -56,6 +56,11 @@ class Node(object):
 
         return [child for _, child in self._children.items()]
 
+    def get_child_names(self):
+
+        return [child for child, _ in self._children.items()]
+
+    
     def __dir__(self):
 
         # Get the names of the attributes of the class
@@ -66,16 +71,23 @@ class Node(object):
 
         return l
 
-    def __getattr__(self, name):
-        if name in self._children:
+    def __getattribute__(self, name):
 
-            if self._children[name].is_leaf:
-                return self._children[name].value
 
+        try:
+            if name in self._children:
+
+                if self._children[name].is_leaf:
+                    return self._children[name].value
+
+                else:
+                    return self._children[name]
             else:
-                return self._children[name]
-        else:
-            return super(Node, self).__getattr__(name)
+                return super().__getattribute__(name)
+
+        except:
+
+            return super().__getattribute__(name)
 
     def __setattr__(self, name, value):
 

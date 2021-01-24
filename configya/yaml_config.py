@@ -8,6 +8,7 @@ import yaml
 from nested_diff import diff
 
 import configya.file_utils as file_utils
+
 from .tree import Node
 
 
@@ -76,9 +77,7 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
                 self._configuration = self._build_tree(self._default_structure)
                 self._configuration_dict = self._default_structure
-                
 
-                
     def _is_existing(self) -> bool:
         """
 
@@ -134,7 +133,6 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
             self._configuration = self._build_tree(self._default_structure)
             self._configuration_dict = self._default_structure
-            
 
         else:
 
@@ -142,7 +140,7 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
             self._configuration_dict = user_config_dict
             self._configuration = self._build_tree(user_config_dict)
-            
+
     def _check_same_structure(self, user_config_dict: dict) -> bool:
         """
         Return True if d1 and d2 have the same keys structure 
@@ -271,7 +269,6 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
                 yield key, d[key]
 
-
     def _subs_values_with_none(self, d):
         """
         This remove all values from d and all
@@ -294,26 +291,21 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
         return type(val) == int or type(val) == float
 
-
     @staticmethod
     def _build_tree(d: dict):
 
         config = Node("_root_")
 
-        for k,v in self._traverse_dict(d):
+        tree_traverse(d, config)
 
-            pass
+        return config
         
-        
-
-    
-    
     def __dir__(self):
 
         # Get the names of the attributes of the class
         l = list(self.__class__.__dict__.keys())
 
-        #l.extend(key for key in self._traverse_dict(self._configuration))
+        l.extend([key for key in self._configuration.get_child_names()])
 
         return l
 
@@ -341,14 +333,40 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
             raise ValueError(f"Configuration key {key} does not exist")
 
-
-            
-        
     def __repr__(self):
 
         print(self._full_path)
 
         return yaml.dump(self._configuration, default_flow_style=False)
+
+    def __getattr__(self, name):
+
+    
+        if name in self._configuration.get_child_names():
+
+            return self._configuration[name]
+
+        else:
+
+            return super().__getattr__(name)
+
+
+
+
+def tree_traverse(tree, parent=None):
+    for k, v in tree.items():
+
+        if isinstance(v, dict):
+            tmp = Node(k)
+            parent.add_child(tmp)
+
+            tree_traverse(v, tmp)
+
+        else:
+            tmp = Node(k, value=v)
+            parent.add_child(tmp)
+
+            
 
 
 def replace_inplace(data, match_key, match_value, repl):
