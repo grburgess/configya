@@ -1,12 +1,14 @@
-import os
-import yaml
-import warnings
-from nested_diff import diff
-import configya.file_utils as file_utils
-from pathlib import Path
-
 # from yaml_config.differ import differ
 import json
+import os
+import warnings
+from pathlib import Path
+
+import yaml
+from nested_diff import diff
+
+import configya.file_utils as file_utils
+from .tree import Node
 
 
 class BadStructureWarning(RuntimeWarning):
@@ -32,20 +34,23 @@ class SingletonMeta(type):
 class YAMLConfig(object, metaclass=SingletonMeta):
     def __init__(self, structure: dict, config_path: str, config_name: str):
 
-        assert isinstance(structure, dict), "the structure must be in the form of dict"
+        assert isinstance(
+            structure, dict), "the structure must be in the form of dict"
 
         self._default_structure: str = structure
 
         self._config_path: Path = file_utils.sanitize_filename(config_path)
 
-        file_utils.if_dir_containing_file_not_existing_then_make(self._config_path)
+        file_utils.if_dir_containing_file_not_existing_then_make(
+            self._config_path)
 
         self._config_name: str = config_name
         self._full_path: Path = self._config_path / self._config_name
 
         if not self._is_existing():
 
-            self._configuration = self._default_structure
+            self._configuration = self._build_tree(self._default_structure)
+            self._configuration_dict = self._default_structure
 
         else:
             # now try to read
@@ -64,16 +69,19 @@ class YAMLConfig(object, metaclass=SingletonMeta):
             user_config_dict = yaml.load(f, Loader=yaml.SafeLoader)
 
             if user_config_dict is not None:
-            
+
                 self._check_if_corrupt(user_config_dict)
 
             else:
 
-                self._configuration = self._default_structure
+                self._configuration = self._build_tree(self._default_structure)
+                self._configuration_dict = self._default_structure
+                
+
                 
     def _is_existing(self) -> bool:
         """
-        
+
         is if the file is there, if not write
 
         :returns: 
@@ -124,14 +132,17 @@ class YAMLConfig(object, metaclass=SingletonMeta):
             self._backup_user_config(user_config_dict)
             self._write_default_config()
 
-            self._configuration = self._default_structure
+            self._configuration = self._build_tree(self._default_structure)
+            self._configuration_dict = self._default_structure
+            
 
         else:
 
             self._check_same_types(user_config_dict)
 
-            self._configuration = user_config_dict
-
+            self._configuration_dict = user_config_dict
+            self._configuration = self._build_tree(user_config_dict)
+            
     def _check_same_structure(self, user_config_dict: dict) -> bool:
         """
         Return True if d1 and d2 have the same keys structure 
@@ -157,7 +168,7 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
     def _check_same_types(self, user_config_dict: dict) -> None:
         """
-        
+
         check in the values all have the same types 
         and if not backup and replace
 
@@ -172,11 +183,13 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
         # this ensures the lists are ordered. It is one hell of a hack
 
-        sorted_default = json.loads(json.dumps(self._default_structure, sort_keys=True))
+        sorted_default = json.loads(json.dumps(
+            self._default_structure, sort_keys=True))
         sorted_user = json.loads(json.dumps(user_config_dict, sort_keys=True))
 
         for (key1, value1), (key2, value2) in zip(
-            self._traverse_dict(sorted_default), self._traverse_dict(sorted_user),
+            self._traverse_dict(
+                sorted_default), self._traverse_dict(sorted_user),
         ):
 
             assert key1 == key2, f"{key1} != {key2}"
@@ -258,21 +271,7 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
                 yield key, d[key]
 
-    def _traverse_keys(self, d):
 
-        for key in d:
-
-            if isinstance(d[key], dict):
-
-                for key, value in self._traverse_dict(d[key]):
-
-                    yield key
-
-            else:
-
-                yield key
-
-                
     def _subs_values_with_none(self, d):
         """
         This remove all values from d and all
@@ -296,16 +295,28 @@ class YAMLConfig(object, metaclass=SingletonMeta):
         return type(val) == int or type(val) == float
 
 
+    @staticmethod
+    def _build_tree(d: dict):
+
+        config = Node("_root_")
+
+        for k,v in self._traverse_dict(d):
+
+            pass
+        
+        
+
+    
+    
     def __dir__(self):
 
         # Get the names of the attributes of the class
         l = list(self.__class__.__dict__.keys())
 
-
         #l.extend(key for key in self._traverse_dict(self._configuration))
-        
+
         return l
-        
+
     def __getitem__(self, key):
 
         if key in self._configuration:
@@ -330,6 +341,9 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
             raise ValueError(f"Configuration key {key} does not exist")
 
+
+            
+        
     def __repr__(self):
 
         print(self._full_path)
