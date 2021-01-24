@@ -258,6 +258,21 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
                 yield key, d[key]
 
+    def _traverse_keys(self, d):
+
+        for key in d:
+
+            if isinstance(d[key], dict):
+
+                for key, value in self._traverse_dict(d[key]):
+
+                    yield key
+
+            else:
+
+                yield key
+
+                
     def _subs_values_with_none(self, d):
         """
         This remove all values from d and all
@@ -280,6 +295,17 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
         return type(val) == int or type(val) == float
 
+
+    def __dir__(self):
+
+        # Get the names of the attributes of the class
+        l = list(self.__class__.__dict__.keys())
+
+
+        #l.extend(key for key in self._traverse_dict(self._configuration))
+        
+        return l
+        
     def __getitem__(self, key):
 
         if key in self._configuration:
