@@ -79,7 +79,7 @@ class Node(object):
 
         else:
 
-            raise RuntimeError("cannot set the value of a key!")
+            raise RuntimeError("Woah, you are going to overwrite the structure")
 
     @property
     def is_leaf(self) -> bool:
@@ -147,7 +147,7 @@ class Node(object):
 
                 else:
 
-                    raise RuntimeError("cannot set the value of a key!")
+                    raise RuntimeError(" Woah, you are going to overwrite the structure")
 
             else:
                 return super().__setattr__(name, value)
