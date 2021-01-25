@@ -294,7 +294,7 @@ class YAMLConfig(object, metaclass=SingletonMeta):
     @staticmethod
     def _build_tree(d: dict):
 
-        config = Node("_root_")
+        config = Node("_config_")
 
         tree_traverse(d, config)
 
@@ -337,7 +337,7 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
         print(self._full_path)
 
-        return yaml.dump(self._configuration, default_flow_style=False)
+        return self._configuration.__repr__()
 
     def __getattr__(self, name):
 
