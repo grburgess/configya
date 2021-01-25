@@ -45,6 +45,20 @@ class Node(object):
     def _set_parent(self, parent: "Node") -> None:
         self.parent = parent
 
+    @property
+    def leaves(self) -> List[str]:
+        """
+        The children names that are leaves i.e., are the end
+        """
+        return [child.name for child in self._get_children() if child.is_leaf]
+
+    @property
+    def branches(self) -> List[str]:
+        """
+        The children names that are leaves i.e., are not the end
+        """
+        return [child.name for child in self._get_children() if not child.is_leaf]
+
     def __getitem__(self, key):
 
         if key in self._children:
@@ -59,19 +73,21 @@ class Node(object):
 
     def __setitem__(self, key, value) -> None:
 
-        if key in self._children:
+        if key in self.leaves:
 
-            if self._children[key].is_leaf:
+            self._children[key].value = value
 
-                self._children[key] = value
+        else:
 
-            else:
-
-                raise RuntimeError("cannot set the value of a key!")
+            raise RuntimeError("cannot set the value of a key!")
 
     @property
     def is_leaf(self) -> bool:
         return len(self._children) == 0
+
+    @property
+    def is_branch(self) -> bool:
+        return not self.is_leaf
 
     @property
     def is_root(self) -> bool:

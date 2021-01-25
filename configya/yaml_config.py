@@ -299,7 +299,7 @@ class YAMLConfig(object, metaclass=SingletonMeta):
         tree_traverse(d, config)
 
         return config
-        
+
     def __dir__(self):
 
         # Get the names of the attributes of the class
@@ -311,9 +311,9 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
     def __getitem__(self, key):
 
-        if key in self._configuration:
+        if key in self._configuration.get_child_names():
 
-            return self._configuration[key]
+            return self._configuration.__getitem__(key)
 
         else:
 
@@ -321,13 +321,9 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
     def __setitem__(self, key, item):
 
-        if key in self._configuration:
+        if key in self._configuration.get_child_names():
 
-            assert not isinstance(
-                self._configuration[key], dict
-            ), f"Woah, you are going to overwrite the structure"
-
-            self._configuration[key] = item
+            self._configuration.__setitem__(key, item)
 
         else:
 
@@ -341,16 +337,29 @@ class YAMLConfig(object, metaclass=SingletonMeta):
 
     def __getattr__(self, name):
 
-    
         if name in self._configuration.get_child_names():
 
-            return self._configuration[name]
+            return self._configuration.__getattribute__(name)
 
         else:
 
             return super().__getattr__(name)
 
+    def __setattr__(self, name, value):
 
+        if "_configuration" in self.__dict__:
+
+            if name in self._configuration.get_child_names():
+
+                return self._configuration.__setattr__(name, value)
+
+            else:
+
+                return super().__setattr__(name, value)
+
+        else:
+
+            return super().__setattr__(name, value)
 
 
 def tree_traverse(tree, parent=None):
@@ -365,8 +374,6 @@ def tree_traverse(tree, parent=None):
         else:
             tmp = Node(k, value=v)
             parent.add_child(tmp)
-
-            
 
 
 def replace_inplace(data, match_key, match_value, repl):
