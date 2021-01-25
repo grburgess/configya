@@ -30,6 +30,32 @@ def test_create_file(config):
 
     #shutil.rmtree(_test_path)
 
+
+def test_powers(config):
+
+    # test access
+
+    config.val1 == 1.
+    config["val1"] == 1.
+
+    config["sub1"].val1 == config.sub1["val1"]
+
+    # try setting a node
+
+    
+
+    with pytest.raises(RuntimeError):
+
+        config.sub1 = 1
+
+    with pytest.raises(RuntimeError):
+
+        config.sub2["sub3"] = 1
+
+    print(config)
+
+    
+    
 def test_non_existing(config_class):
 
     with pytest.warns(NoConfigurationWarning):
@@ -52,7 +78,7 @@ def test_bad_structure(config, bad_structure, config_class):
         
         new_config = config_class()
 
-    d = diff(new_config._default_structure, new_config._configuration)
+    d = diff(new_config._default_structure, new_config._configuration_dict)
 
     # make sure we have the default config now
     assert "D" not in d
@@ -73,6 +99,8 @@ def test_bad_type(config, wrong_type_structure, config_class):
 
         
         new_config = config_class()
+
+    print(new_config)
 
     assert new_config['val2'] == "crap"
 

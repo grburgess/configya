@@ -133,9 +133,9 @@ config['my_iq']
 
 Well...
 
-
+We can modify with class access
 ```python
-config['my_iq'] = 200
+config.my_iq = 200
 config['my_iq']
 ```
 
