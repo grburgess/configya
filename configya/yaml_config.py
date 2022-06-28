@@ -151,18 +151,17 @@ class YAMLConfig(object, metaclass=SingletonMeta):
         :param d2: dictionary 2
         :return: True or False
         """
-
-        is_same = True
-        d1 = self._subs_values_with_none(user_config_dict)
-        d2 = self._subs_values_with_none(self._default_structure)
+        d1 = self._subs_values_with_none(sorted(user_config_dict))
+        d2 = self._subs_values_with_none(sorted(self._default_structure))
 
         difference = diff(d1, d2)
 
         if "D" in difference:
 
-            is_same = False
+            return False
 
-        return is_same
+        return True
+
 
     def _check_same_types(self, user_config_dict: dict) -> None:
         """
